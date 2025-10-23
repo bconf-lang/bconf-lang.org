@@ -2,10 +2,10 @@
 import "../styles/specs.css";
 
 import type { MarkdownLayoutProps } from "astro";
+import Sidebar from "@components/spec/Sidebar.astro";
+import ToCMobileTrigger from "@components/spec/ToCMobileTrigger.astro";
+import { inferSpecVersionFromPath } from "@utils/path";
 import BaseShell from "./_base.astro";
-import Sidebar from "../components/spec/Sidebar.astro";
-import ToCMobileTrigger from "../components/spec/ToCMobileTrigger.astro";
-import { inferSpecVersionFromPath } from "../utils/path";
 
 type Props = MarkdownLayoutProps<{}>;
 

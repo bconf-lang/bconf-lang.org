@@ -1,7 +1,7 @@
 ---
 import { getRelativeLocaleUrl } from "astro:i18n";
-import { inferSpecVersionFromPath } from "../../utils/path";
-import * as Switcher from "../ui/switcher";
+import * as Switcher from "@components/ui/switcher";
+import { inferSpecVersionFromPath } from "@utils/path";
 
 const locale = Astro.currentLocale ?? "en";
 const pages = import.meta.glob("../../pages/**");
