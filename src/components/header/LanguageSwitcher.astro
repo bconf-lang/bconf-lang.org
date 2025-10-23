@@ -3,23 +3,23 @@ import { getRelativeLocaleUrlList, getRelativeLocaleUrl } from "astro:i18n";
 import * as Switcher from "../ui/switcher";
 
 const locales = getRelativeLocaleUrlList().map((l) => {
-	const locale = l.split("/")[1] ?? "en";
-	return {
-		text: locale,
-		href: getRelativeLocaleUrl(locale),
-	};
+    const locale = l.split("/")[1] ?? "en";
+    return {
+        text: locale,
+        href: getRelativeLocaleUrl(locale),
+    };
 });
 ---
 
 <Switcher.Root>
-	<Switcher.Trigger class="py-1 px-4">{Astro.currentLocale}</Switcher.Trigger>
-	<Switcher.Options>
-		<Fragment>
-			{
-				locales.map((l) => {
-					return <Switcher.OptionItem item={l} class="bg-black" />;
-				})
-			}
-		</Fragment>
-	</Switcher.Options>
+    <Switcher.Trigger class="px-4 py-1">{Astro.currentLocale}</Switcher.Trigger>
+    <Switcher.Options>
+        <Fragment>
+            {
+                locales.map((l) => {
+                    return <Switcher.OptionItem item={l} class="bg-black" />;
+                })
+            }
+        </Fragment>
+    </Switcher.Options>
 </Switcher.Root>

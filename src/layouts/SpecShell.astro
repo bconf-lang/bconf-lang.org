@@ -13,12 +13,12 @@ const { headings } = Astro.props;
 ---
 
 <BaseShell title={`bconf: Spec ${inferSpecVersionFromPath(Astro.url.pathname)}`}>
-	<ToCMobileTrigger slot="after-header" />
+    <ToCMobileTrigger slot="after-header" />
 
-	<div class="grid grid-cols-1 md:grid-cols-[200px_minmax(0px,1fr)] bg-inherit">
-		<Sidebar headings={headings} />
-		<main class="px-6">
-			<slot />
-		</main>
-	</div>
+    <div class="grid grid-cols-1 bg-inherit md:grid-cols-[200px_minmax(0px,1fr)]">
+        <Sidebar headings={headings} />
+        <main class="px-6">
+            <slot />
+        </main>
+    </div>
 </BaseShell>

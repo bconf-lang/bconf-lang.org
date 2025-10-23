@@ -1,25 +1,22 @@
 ---
 export type OptionItem = {
-	text: string;
-	href: string;
+    text: string;
+    href: string;
 };
 
 type Props = {
-	class?: string;
-	item: OptionItem;
+    class?: string;
+    item: OptionItem;
 };
 
 const { item, class: className } = Astro.props;
 ---
 
 <li class="w-full">
-	<a
-		class:list={[
-			"py-1 px-4 text-neutral-800 bg-neutral-200 hover:bg-neutral-300 w-full inline-block",
-			className,
-		]}
-		href={item.href}
-	>
-		{item.text}
-	</a>
+    <a
+        class:list={["inline-block w-full bg-neutral-200 px-4 py-1 text-neutral-800 hover:bg-neutral-300", className]}
+        href={item.href}
+    >
+        {item.text}
+    </a>
 </li>
