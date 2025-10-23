@@ -1,0 +1,24 @@
+---
+import "../styles/specs.css";
+
+import type { MarkdownLayoutProps } from "astro";
+import BaseShell from "./_base.astro";
+import Sidebar from "../components/spec/Sidebar.astro";
+import ToCMobileTrigger from "../components/spec/ToCMobileTrigger.astro";
+import { inferSpecVersionFromPath } from "../utils/path";
+
+type Props = MarkdownLayoutProps<{}>;
+
+const { headings } = Astro.props;
+---
+
+<BaseShell title={`bconf: Spec ${inferSpecVersionFromPath(Astro.url.pathname)}`}>
+	<ToCMobileTrigger slot="after-header" />
+
+	<div class="grid grid-cols-1 md:grid-cols-[200px_minmax(0px,1fr)] bg-inherit">
+		<Sidebar headings={headings} />
+		<main class="px-6">
+			<slot />
+		</main>
+	</div>
+</BaseShell>

@@ -1,0 +1,24 @@
+---
+import type { MarkdownHeading } from "astro";
+// import SpecSwitcher from "./SpecSwitcher.astro";
+import TableOfContents from "./TableOfContents.astro";
+import { buildHeadingTree } from "../../utils/markdown";
+
+type Props = {
+	headings: MarkdownHeading[];
+};
+
+const { headings } = Astro.props;
+---
+
+<aside
+	id="toc-nav"
+	class="md:sticky md:top-(--header-height) md:block md:max-h-[calc(100vh-var(--header-height))]
+			hidden
+			fixed top-(--mobile-header-height) left-0 right-0 z-40
+			max-h-[calc(100vh-var(--mobile-header-height))] overflow-y-auto
+			bg-inherit border-r border-neutral-400 p-4"
+>
+	<!-- <SpecSwitcher /> -->
+	<TableOfContents headings={buildHeadingTree(headings, { skipDepthOne: true })} />
+</aside>

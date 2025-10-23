@@ -1,1 +1,16 @@
 @import "tailwindcss";
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+:root {
+	--header-height: 65px;
+	--mobile-nav-height: 41px; /* +1 pixel to account for bottom border */
+	--mobile-header-height: calc(var(--header-height) + var(--mobile-nav-height));
+}
+
+html {
+	@apply scroll-smooth;
+}
+
+button {
+	@apply cursor-pointer;
+}

@@ -1,0 +1,25 @@
+---
+import OptionItem, { type OptionItem as OptionItemType } from "./option-item.astro";
+
+type Props = {
+	items?: Array<OptionItemType>;
+	class?: string;
+};
+
+const { items, class: className } = Astro.props;
+---
+
+<ul
+	class:list={[
+		"absolute top-full left-0 right-0 bg-neutral-200 hidden rounded-b-md overflow-hidden max-h-32 overflow-y-auto pt-2",
+		className,
+	]}
+>
+	<slot>
+		{
+			items?.map((item) => {
+				return <OptionItem item={item} />;
+			})
+		}
+	</slot>
+</ul>

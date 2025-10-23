@@ -1,0 +1,94 @@
+---
+import type { MarkdownHeading } from "astro";
+import type { HeadingNode } from "../../utils/markdown";
+
+type Props = {
+	headings: HeadingNode[];
+	nested?: boolean;
+};
+
+const { headings, nested = false } = Astro.props;
+---
+
+<nav>
+	<ul class:list={["flex flex-col gap-2", nested && "pl-4 mt-2 border-l border-l-neutral-300"]}>
+		{
+			headings.map((item) => (
+				<li>
+					<a href={`#${item.slug}`} class="hover:text-neutral-400 data-active:font-bold">
+						{item.text}
+					</a>
+					{item.children.length > 0 && <Astro.self headings={item.children} nested />}
+				</li>
+			))
+		}
+	</ul>
+</nav>
+
+<script>
+	const headings = Array.from(
+		document.querySelectorAll("main h2, main h3, main h4, main h5, main h6")
+	);
+	const sidebarLinks = Array.from<HTMLAnchorElement>(document.querySelectorAll("aside > nav a"));
+	const menuTriggerTextEl = document.querySelector("#menu-trigger > span")!;
+
+	let lastScrollY = window.scrollY;
+	let lastHeadingIndex = -1;
+
+	function setActiveOnLoad() {
+		// Observer is -85% from the bottom, so 15% is the trigger margin
+		const triggerMargin = window.innerHeight * 0.15;
+		const heading = headings.findLast((h) => h.getBoundingClientRect().top < triggerMargin);
+		if (heading) {
+			highlightSidebarLink(getSidebarLinkIndex(heading.id));
+		}
+	}
+
+	setActiveOnLoad();
+
+	function highlightSidebarLink(index: number) {
+		sidebarLinks[lastHeadingIndex]?.removeAttribute("data-active");
+		const active = sidebarLinks[index];
+		active.toggleAttribute("data-active");
+		menuTriggerTextEl.textContent = active.innerText;
+		lastHeadingIndex = index;
+	}
+
+	function getSidebarLinkIndex(id: string) {
+		return sidebarLinks.findIndex((e) => e.hash === `#${id}`);
+	}
+
+	const handleObserver: IntersectionObserverCallback = (entries) => {
+		for (const entry of entries) {
+			if (entry.isIntersecting) {
+				lastScrollY = window.scrollY;
+				const index = getSidebarLinkIndex(entry.target.id);
+				if (index === -1 || index === lastHeadingIndex) {
+					return;
+				}
+
+				highlightSidebarLink(index);
+				return;
+			}
+
+			// Scrolling up
+			if (window.scrollY < lastScrollY) {
+				lastScrollY = window.scrollY;
+				const prevHeadingIndex = lastHeadingIndex - 1;
+				if (prevHeadingIndex < 0) {
+					return;
+				}
+
+				highlightSidebarLink(prevHeadingIndex);
+				return;
+			}
+		}
+	};
+
+	const observer = new IntersectionObserver(handleObserver, {
+		rootMargin: "0px 0px -85% 0px",
+		threshold: 0,
+	});
+
+	headings.forEach((e) => observer.observe(e));
+</script>

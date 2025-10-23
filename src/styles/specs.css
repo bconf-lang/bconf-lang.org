@@ -1,0 +1,62 @@
+@import "./global.css";
+
+main {
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		@apply scroll-mt-(--mobile-header-height) md:scroll-mt-(--header-height);
+	}
+
+	h1 {
+		@apply text-3xl font-bold my-6;
+	}
+
+	h2 {
+		@apply text-2xl font-bold my-5;
+	}
+
+	h3 {
+		@apply text-xl font-bold my-5;
+	}
+
+	h4,
+	h5,
+	h6 {
+		@apply text-lg font-bold my-4;
+	}
+
+	p {
+		@apply my-4;
+	}
+
+	pre {
+		@apply p-4 rounded-md;
+
+		code {
+			@apply bg-transparent p-0;
+		}
+	}
+
+	code {
+		@apply font-medium p-1 rounded-md bg-neutral-300 dark:bg-neutral-600;
+	}
+
+	ul {
+		@apply list-disc pl-8;
+	}
+
+	li {
+		@apply my-2;
+
+		&:last-of-type {
+			@apply mb-4;
+		}
+	}
+
+	a {
+		@apply underline;
+	}
+}

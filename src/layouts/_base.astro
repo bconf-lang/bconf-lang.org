@@ -1,0 +1,34 @@
+---
+import "../styles/global.css";
+import Header from "../components/header/Header.astro";
+
+type Props = {
+	title?: string;
+};
+
+const { title } = Astro.props;
+
+// TODO: Get what specs are available for this locale (and others?) and create a dropdown to go to specs (maybe in the nav to be different)
+// TODO: Change logo to something related to a cog/settings
+---
+
+<!doctype html>
+<html lang={Astro.currentLocale}>
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title ?? "bconf: For better configuration files"}</title>
+		<slot name="head" />
+	</head>
+
+	<body
+		class="relative bg-neutral-100 text-neutral-800 dark:text-neutral-100 dark:bg-neutral-900"
+	>
+		<Header>
+			<slot name="after-header" />
+		</Header>
+		<slot />
+	</body>
+</html>
