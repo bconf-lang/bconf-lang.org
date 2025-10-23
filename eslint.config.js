@@ -35,21 +35,5 @@ export default defineConfig([
     },
 
     // Astro
-    astro.configs.recommended,
-    {
-        files: ["**/*.astro"],
-        languageOptions: {
-            parser: astro.parser,
-            parserOptions: {
-                parser: tseslint.parser,
-                extraFileExtensions: [".astro"],
-                sourceType: "module",
-                ecmaVersion: "latest",
-                project: "./tsconfig.json",
-            },
-        },
-        rules: {
-            "no-undef": "off", // Disable "not defined" errors for specific Astro types that are globally available (ImageMetadata)
-        },
-    },
+    ...astro.configs.recommended,
 ]);
