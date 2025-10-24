@@ -1,0 +1,17 @@
+---
+import ThemeToggle from "@components/header/ThemeToggle.astro";
+import BaseShell from "./_base.astro";
+import GitHubLink from "@components/GitHubLink.astro";
+---
+
+<BaseShell header={false}>
+    <main class="p-8">
+        <slot />
+    </main>
+
+    <footer class="bg-accent flex w-full items-center justify-between p-6 text-neutral-800">
+        <ThemeToggle />
+        <p>Created by <a class="underline" href="https://brodz.dev">Brody Neumann</a></p>
+        <GitHubLink />
+    </footer>
+</BaseShell>

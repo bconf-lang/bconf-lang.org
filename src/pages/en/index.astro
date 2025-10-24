@@ -1,0 +1,207 @@
+---
+import { Code } from "astro:components";
+import { getRelativeLocaleUrl } from "astro:i18n";
+import bconfLang from "../../../public/bconf.tmLanguage.json";
+import HomeShell from "@layouts/HomeShell.astro";
+import GitHubLink from "@components/GitHubLink.astro";
+
+const locale = Astro.currentLocale ?? "en";
+
+const example = `// This is a bconf file
+extends "./base.bconf"
+import from "./secrets.bconf" { $db_user, $db_pass as $database_password }
+
+$app_name = "An awesome app"
+$env = env("APP_ENV")
+
+app {
+    name = $app_name
+    environment = $env
+    features {
+        auth
+    }
+}
+
+server.http.host = "0.0.0.0"
+server.http.port = int(env("PORT"))
+
+server.tls {
+    enabled
+    cert_file = "/etc/ssl/certs/app.crt"
+    key_file = "/etc/ssl/private/app.key"
+}
+
+database.primary {
+    host = "primary.db.internal"
+    user = $db_user
+    pass = $database_password
+    pool_size = int(env("DB_POOL_SIZE"))
+}
+
+database.replicas = [
+    { host = "replica1.db.internal", user = $db_user },
+    { host = "replica2.db.internal", user = $db_user }
+]
+
+database.replicas[0].read_only = true
+database.replicas[1].read_only = false
+
+plugins << {
+    name = "authentication"
+    config {
+        jwt_secret = env("JWT_SECRET")
+        token_expiry = "1h"
+    }
+}
+
+plugins << {
+    name = "cors"
+    config {
+        allowed_origins = ["https://app.example.com", "https://admin.example.com"]
+    }
+}
+
+api_docs_header = """
+    Welcome to the API for \${$app_name}.
+    Host: \${ref(server.http.host)}:\${ref(server.http.port)}
+    Environment: \${$env}
+"""
+
+export vars {
+    $env
+    $app_name as $name
+}`;
+---
+
+<HomeShell>
+    <div class="mx-auto grid max-w-7xl grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-[1fr_1.5fr] lg:grid-rows-[auto_1fr]">
+        <div>
+            <div class="mb-8 flex flex-col gap-4">
+                <div class="flex items-center justify-between gap-4">
+                    <h1 class="text-7xl font-bold">bconf</h1>
+                    <GitHubLink />
+                </div>
+                <p class="text-2xl">
+                    <span>A modern data-serialization format for better configurations</span>
+                </p>
+            </div>
+
+            <a
+                href={getRelativeLocaleUrl(locale, "/specs/v0.1.0")}
+                class="bg-accent flex w-fit items-center justify-between gap-2 rounded-md px-8 py-4 text-xl text-neutral-800 no-underline transition-colors hover:bg-red-300"
+            >
+                <span>Read the spec</span>
+                <svg
+                    class="mt-px w-6"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    color="currentColor"
+                >
+                    <path d="M9 6L15 12L9 18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                    ></path>
+                </svg>
+            </a>
+        </div>
+
+        <Code class="row-span-2" code={example} theme="monokai" lang={bconfLang} />
+
+        <div class="mt-8 flex flex-col gap-12">
+            <div class="flex flex-col gap-4">
+                <h2 class="flex items-center gap-4 text-3xl font-semibold">
+                    <div class="rounded-full bg-neutral-200 p-3 text-neutral-800">
+                        <svg
+                            aria-hidden="true"
+                            class="w-8"
+                            stroke-width="1.5"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            color="currentColor"
+                        >
+                            <path
+                                d="M4 19V5C4 3.89543 4.89543 3 6 3H19.4C19.7314 3 20 3.26863 20 3.6V16.7143"
+                                stroke="currentColor"
+                                stroke-linecap="round"></path>
+                            <path d="M6 17L20 17" stroke="currentColor" stroke-linecap="round"></path>
+                            <path d="M6 21L20 21" stroke="currentColor" stroke-linecap="round"></path>
+                            <path
+                                d="M6 21C4.89543 21 4 20.1046 4 19C4 17.8954 4.89543 17 6 17"
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"></path>
+                            <path d="M9 7L15 7" stroke="currentColor" stroke-linecap="round"></path>
+                        </svg>
+                    </div>
+                    <span>Human Readable</span>
+                </h2>
+                <p class="text-xl">
+                    <!-- bconf is easy to read and learn due to its minimal syntax. The syntax and concepts should be
+                    familiar, leveraging common constructs found in other formats and programming languages. -->
+                    bconf offers a clean, familiar syntax that is easy to read and learn. The syntax and concepts should
+                    be familiar to anyone who has programmed, leveraging common constructs found in other formats and programming
+                    languages
+                </p>
+            </div>
+
+            <div class="flex flex-col gap-4">
+                <h2 class="flex items-center gap-4 text-3xl font-semibold">
+                    <div class="rounded-full bg-neutral-200 p-3 text-neutral-800">
+                        <svg
+                            aria-hidden="true"
+                            class="w-8"
+                            stroke-width="1.5"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            color="currentColor"
+                            ><path d="M20 20H4V4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                            ></path>
+                            <path
+                                d="M4 16.5L12 9L15 12L19.5 7.5"
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"></path>
+                        </svg>
+                    </div>
+                    <span>Scalable</span>
+                </h2>
+                <p class="text-xl/8">
+                    Modularity is at the core of bconf, with support for variables and extending other documents. Deeply
+                    nested keys can be defined inline, making it easy to scale and maintain larger files
+                </p>
+            </div>
+
+            <div class="flex flex-col gap-4">
+                <h2 class="flex items-center gap-4 text-3xl font-semibold">
+                    <div class="rounded-full bg-neutral-200 p-3 text-neutral-800">
+                        <svg
+                            aria-hidden="true"
+                            class="w-8"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            color="currentColor"
+                            stroke-width="1.5"
+                        >
+                            <path
+                                d="M8 15C12.8747 15 15 12.949 15 8C15 12.949 17.1104 15 22 15C17.1104 15 15 17.1104 15 22C15 17.1104 12.8747 15 8 15Z"
+                                stroke="currentColor"
+                                stroke-linejoin="round"></path>
+                            <path
+                                d="M2 6.5C5.13376 6.5 6.5 5.18153 6.5 2C6.5 5.18153 7.85669 6.5 11 6.5C7.85669 6.5 6.5 7.85669 6.5 11C6.5 7.85669 5.13376 6.5 2 6.5Z"
+                                stroke="currentColor"
+                                stroke-linejoin="round"></path>
+                        </svg>
+                    </div>
+                    <span>Easy to enhance</span>
+                </h2>
+                <p class="text-xl/8">
+                    Features like statements and tags use a generic syntax, allowing you to define your own custom logic
+                    and structures to enhance configurations as your application requires
+                </p>
+            </div>
+        </div>
+    </div>
+</HomeShell>

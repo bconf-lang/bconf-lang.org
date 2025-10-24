@@ -32,18 +32,6 @@ main {
         @apply my-4;
     }
 
-    pre {
-        @apply rounded-md p-4;
-
-        code {
-            @apply bg-transparent p-0;
-        }
-    }
-
-    code {
-        @apply rounded-md bg-neutral-300 p-1 font-medium dark:bg-neutral-600;
-    }
-
     ul {
         @apply list-disc pl-8;
     }

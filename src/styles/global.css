@@ -1,6 +1,10 @@
 @import "tailwindcss";
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
+@theme {
+    --color-accent: #ff6e6e;
+}
+
 :root {
     --header-height: 65px;
     --mobile-nav-height: 41px; /* +1 pixel to account for bottom border */
@@ -13,4 +17,16 @@ html {
 
 button {
     @apply cursor-pointer;
+}
+
+pre {
+    @apply rounded-md p-4;
+
+    code {
+        @apply bg-transparent p-0;
+    }
+}
+
+code {
+    @apply rounded-md bg-neutral-300 p-1 font-medium dark:bg-neutral-600;
 }
