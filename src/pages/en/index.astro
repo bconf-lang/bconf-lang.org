@@ -4,6 +4,7 @@ import { getRelativeLocaleUrl } from "astro:i18n";
 import bconfLang from "../../../public/bconf.tmLanguage.json";
 import HomeShell from "@layouts/HomeShell.astro";
 import GitHubLink from "@components/GitHubLink.astro";
+import { ChevronRightIcon } from "@components/ui/icons";
 
 const locale = Astro.currentLocale ?? "en";
 
@@ -91,17 +92,7 @@ export vars {
                 class="bg-accent flex w-fit items-center justify-between gap-2 rounded-md px-8 py-4 text-xl text-neutral-800 no-underline transition-colors hover:bg-red-300"
             >
                 <span>Read the spec</span>
-                <svg
-                    class="mt-px w-6"
-                    stroke-width="2"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    color="currentColor"
-                >
-                    <path d="M9 6L15 12L9 18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                    ></path>
-                </svg>
+                <ChevronRightIcon class="mt-0.5" />
             </a>
         </div>
 
