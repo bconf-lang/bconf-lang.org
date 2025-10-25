@@ -1,5 +1,5 @@
 ---
-import ThemeToggle from "@components/header/ThemeToggle.astro";
+import ThemeSelector from "@components/theme-selector/ThemeSelector.astro";
 import BaseShell from "./_base.astro";
 import GitHubLink from "@components/GitHubLink.astro";
 ---
@@ -10,7 +10,7 @@ import GitHubLink from "@components/GitHubLink.astro";
     </main>
 
     <footer class="bg-accent flex w-full items-center justify-between p-6 text-neutral-800">
-        <ThemeToggle />
+        <ThemeSelector />
         <p>Created by <a class="underline" href="https://brodz.dev">Brody Neumann</a></p>
         <GitHubLink />
     </footer>

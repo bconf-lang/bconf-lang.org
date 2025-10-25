@@ -1,0 +1,89 @@
+---
+import { BrightnessIcon, MoonIcon, SunlightIcon } from "@components/ui/icons";
+import Toggle from "./Toggle.astro";
+import ChevronDown from "@components/ui/icons/chevron-down.astro";
+
+type Props = {
+    collapsed?: boolean;
+};
+
+const { collapsed } = Astro.props;
+---
+
+<div
+    id="theme-selector"
+    class="group relative"
+    data-active-theme="device"
+    data-collapsed={collapsed ? "hide" : undefined}
+>
+    <button
+        id="theme-collapsed-trigger"
+        class="flex items-center rounded-full bg-neutral-200 p-3 text-neutral-800 group-not-data-collapsed:hidden"
+    >
+        <div>
+            <BrightnessIcon class="group-not-data-[active-theme=device]:hidden" />
+            <SunlightIcon class="group-not-data-[active-theme=light]:hidden" />
+            <MoonIcon class="group-not-data-[active-theme=dark]:hidden" />
+        </div>
+        <ChevronDown class="group-data-[state=show]:rotate-180" />
+    </button>
+
+    <div
+        id="theme-toggles"
+        class="flex w-fit gap-0.5 overflow-hidden rounded-full bg-neutral-200 p-1 group-data-collapsed:absolute group-data-collapsed:top-full group-data-collapsed:left-1/2 group-data-collapsed:z-10 group-data-collapsed:-translate-x-1/2 group-data-collapsed:flex-col group-data-collapsed:gap-0 group-data-collapsed:rounded-md group-data-collapsed:p-0 group-data-[collapsed=hide]:hidden"
+    >
+        <Toggle theme="device" description="Auto">
+            <BrightnessIcon />
+        </Toggle>
+        <Toggle theme="light" description="Light">
+            <SunlightIcon stroke-width={2} />
+        </Toggle>
+        <Toggle theme="dark" description="Dark">
+            <MoonIcon />
+        </Toggle>
+    </div>
+</div>
+
+<script>
+    const theme = localStorage.getItem("theme") ?? "device";
+    const themeSelector = document.querySelector<HTMLDivElement>("#theme-selector")!;
+
+    const collapsedTrigger = themeSelector.querySelector<HTMLButtonElement>("#theme-collapsed-trigger")!;
+    collapsedTrigger.addEventListener("click", () => {
+        const prevState = themeSelector.getAttribute("data-collapsed");
+        if (!prevState) {
+            return;
+        }
+
+        themeSelector.setAttribute("data-collapsed", prevState === "hide" ? "show" : "hide");
+    });
+
+    const toggles = themeSelector.querySelectorAll<HTMLButtonElement>("#theme-toggles > button")!;
+    for (const el of toggles) {
+        // On load, make sure the correct theme toggle is being highlighted
+        if (el.getAttribute("data-theme") === theme) {
+            setTheme(el);
+        }
+
+        el.addEventListener("click", () => {
+            toggles.forEach((t) => t.removeAttribute("data-active"));
+            setTheme(el);
+        });
+    }
+
+    function setTheme(el: HTMLButtonElement) {
+        el.setAttribute("data-active", "");
+        let themeToUse = el.getAttribute("data-theme");
+        if (!themeToUse) {
+            themeToUse = "device";
+        }
+
+        themeSelector.setAttribute("data-active-theme", themeToUse);
+        document.documentElement.setAttribute("data-theme", themeToUse === "device" ? inferTheme() : themeToUse);
+        localStorage.setItem("theme", themeToUse);
+    }
+
+    function inferTheme() {
+        return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+</script>
