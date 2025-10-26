@@ -8,6 +8,7 @@ import bconfTmLang from "./public/bconf.tmLanguage.json";
 
 // https://astro.build/config
 export default defineConfig({
+    site: "https://bconf-lang.org",
     output: "static",
     markdown: {
         rehypePlugins: [rehypeHeadingIds, rehypeSelfLinkHeadings],
