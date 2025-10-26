@@ -8,13 +8,12 @@ const LOCALE_NAMES: Record<string, string> = {
 
 const currentLocale = String(Astro.currentLocale);
 
-const locales = getRelativeLocaleUrlList().map((l): Switcher.SwitcherItem => {
+const locales = getRelativeLocaleUrlList().map((l) => {
     const locale = l.split("/")[1];
     return {
-        displayText: LOCALE_NAMES[locale] ?? locale,
+        text: LOCALE_NAMES[locale] ?? locale,
         active: locale === currentLocale,
         href: getRelativeLocaleUrl(locale ?? currentLocale),
-        as: "a",
     };
 });
 ---
@@ -25,10 +24,9 @@ const locales = getRelativeLocaleUrlList().map((l): Switcher.SwitcherItem => {
         {
             locales.map((locale) => (
                 <Switcher.Item as="a" active={locale.active} href={locale.href}>
-                    {locale.displayText}
+                    {locale.text}
                 </Switcher.Item>
             ))
         }
     </Switcher.ItemsRoot>
-    <!-- <Switcher.Items items={locales} /> -->
 </Switcher.Root>
