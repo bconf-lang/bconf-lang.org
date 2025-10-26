@@ -1,0 +1,30 @@
+---
+import type { HTMLTag, Polymorphic } from "astro/types";
+
+type Props<Tag extends HTMLTag = HTMLTag> = Polymorphic<{
+    as: Tag;
+    active?: boolean;
+    custom?: boolean;
+}>;
+
+const { as: Component = "button", custom, active, ...props } = Astro.props;
+---
+
+<li>
+    {
+        custom ? (
+            <slot />
+        ) : (
+            <Component
+                {...props}
+                class:list={[
+                    "w-full p-4 text-center hover:bg-neutral-300",
+                    Component === "a" && "inline-block",
+                    active && "bg-neutral-300",
+                ]}
+            >
+                <slot />
+            </Component>
+        )
+    }
+</li>

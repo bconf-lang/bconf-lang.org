@@ -1,0 +1,90 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { inferSpecVersionFromPath } from "@utils/path";
+import * as Switcher from "./switcher";
+
+const locale = String(Astro.currentLocale);
+const currentSpec = inferSpecVersionFromPath(Astro.url.pathname);
+const specs: Array<Switcher.SwitcherItem> = [];
+const pages = import.meta.glob("../../../pages/**");
+
+for (const fileUri of Object.keys(pages)) {
+    const urlPath = fileUri.replace("../../../pages/", "");
+    // Skipping the required `index.md` at the top level
+    // to only handle localized paths
+    if (urlPath === "index.md") {
+        continue;
+    }
+
+    // Should only display specs that have been translated to the current locale
+    if (!urlPath.startsWith(`${locale}/specs`)) {
+        continue;
+    }
+
+    const specVersion = inferSpecVersionFromPath(urlPath);
+    specs.push({
+        as: "a",
+        displayText: specVersion,
+        active: specVersion === currentSpec,
+        href: getRelativeLocaleUrl(locale, `/specs/${specVersion}`),
+    });
+}
+---
+
+<Switcher.Root>
+    <Switcher.Trigger>{currentSpec}</Switcher.Trigger>
+    <Switcher.ItemsRoot>
+        {
+            specs.map((spec) => (
+                <Switcher.Item as="a" href={spec.href}>
+                    {spec.displayText}
+                </Switcher.Item>
+            ))
+        }
+    </Switcher.ItemsRoot>
+</Switcher.Root>
+
+<!-- TODO: Clean up the class groupings and stuff -->
+<!--  
+<div data-collapsed="hide" class="group/switcher relative" id="spec-switcher">
+    <SecondaryButton
+        rounded="full"
+        class="group-data-collapsed/sidebar:group-data-[collapsed=hide]/switcher:bg-transparent group-data-collapsed/sidebar:group-data-[collapsed=hide]/switcher:text-inherit"
+    >
+        <span>{currentSpec}</span>
+        <ChevronDownIcon class="mt-px" />
+    </SecondaryButton>
+
+    <div
+        class="absolute top-full left-1/2 z-10 flex w-full -translate-x-1/2 flex-col gap-0.5 overflow-hidden rounded-md bg-neutral-200 text-neutral-800 group-data-[collapsed=hide]/switcher:hidden"
+    >
+        <ul>
+            {
+                specs.map((s) => {
+                    return (
+                        <li>
+                            <a
+                                class:list={[
+                                    "inline-block w-full p-4 text-center hover:bg-neutral-300",
+                                    currentSpec === s.text && "bg-neutral-300",
+                                ]}
+                                href={s.href}
+                            >
+                                {s.text}
+                            </a>
+                        </li>
+                    );
+                })
+            }
+        </ul>
+    </div>
+</div>
+
+<script>
+    const switcher = document.querySelector("#spec-switcher")!;
+    const toggle = switcher.querySelector<HTMLButtonElement>("button")!;
+    toggle.addEventListener("click", () => {
+        const prevState = switcher.getAttribute("data-collapsed") ?? "show";
+        switcher.setAttribute("data-collapsed", prevState === "hide" ? "show" : "hide");
+    });
+</script> -->

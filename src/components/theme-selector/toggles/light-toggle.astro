@@ -1,0 +1,15 @@
+---
+import { SunlightIcon } from "@components/ui/icons";
+import Toggle from "../toggle.astro";
+
+type Props = {
+    class?: string;
+};
+
+const { class: className } = Astro.props;
+---
+
+<Toggle theme="light" class:list={["group-data-[active-theme=light]/theme:bg-neutral-300", className]}>
+    <SunlightIcon />
+    <slot />
+</Toggle>

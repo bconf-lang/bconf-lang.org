@@ -1,0 +1,15 @@
+---
+import { MoonIcon } from "@components/ui/icons";
+import Toggle from "../toggle.astro";
+
+type Props = {
+    class?: string;
+};
+
+const { class: className } = Astro.props;
+---
+
+<Toggle theme="dark" class:list={["group-data-[active-theme=dark]/theme:bg-neutral-300", className]}>
+    <MoonIcon />
+    <slot />
+</Toggle>

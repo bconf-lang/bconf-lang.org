@@ -1,0 +1,40 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"div">;
+
+const { class: className, ...props } = Astro.props;
+---
+
+<div {...props} data-active-theme="device" class:list={["group/theme relative", className]}>
+    <slot />
+</div>
+
+<script>
+    const theme = localStorage.getItem("theme") ?? "device";
+
+    const selectors = document.querySelectorAll(".group\\/theme");
+    for (const selector of selectors) {
+        selector.setAttribute("data-active-theme", theme);
+
+        const toggles = selector.querySelectorAll<HTMLButtonElement>(".group\\/toggles button[data-theme]");
+        for (const toggle of toggles) {
+            toggle.addEventListener("click", () => {
+                selectTheme(toggle.getAttribute("data-theme") ?? "device");
+            });
+        }
+    }
+
+    function selectTheme(theme: string) {
+        document.documentElement.setAttribute("data-theme", theme === "device" ? inferTheme() : theme);
+        localStorage.setItem("theme", theme);
+
+        for (const selector of selectors) {
+            selector.setAttribute("data-active-theme", theme);
+        }
+    }
+
+    function inferTheme() {
+        return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+</script>

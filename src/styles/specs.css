@@ -7,7 +7,7 @@ main {
     h4,
     h5,
     h6 {
-        @apply scroll-mt-(--mobile-header-height) md:scroll-mt-(--header-height);
+        @apply scroll-mt-(--mobile-header-height) md:scroll-mt-0;
     }
 
     h1 {

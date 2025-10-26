@@ -3,7 +3,7 @@ import "../styles/specs.css";
 
 import type { MarkdownLayoutProps } from "astro";
 import Sidebar from "@components/spec/Sidebar.astro";
-import ToCMobileTrigger from "@components/spec/ToCMobileTrigger.astro";
+import SidebarMobileTrigger from "@components/spec/SidebarMobileTrigger.astro";
 import { inferSpecVersionFromPath } from "@utils/path";
 import BaseShell from "./_base.astro";
 
@@ -13,12 +13,12 @@ const { headings } = Astro.props;
 ---
 
 <BaseShell title={`bconf: Spec ${inferSpecVersionFromPath(Astro.url.pathname)}`}>
-    <ToCMobileTrigger slot="after-header" />
+    <SidebarMobileTrigger />
 
-    <div class="grid grid-cols-1 bg-inherit md:grid-cols-[200px_minmax(0px,1fr)]">
-        <Sidebar headings={headings} />
-        <main class="px-6">
+    <div class="grid grid-cols-1 bg-inherit md:grid-cols-[minmax(0px,1fr)_auto]">
+        <main class="px-6 pb-4">
             <slot />
         </main>
+        <Sidebar headings={headings} />
     </div>
 </BaseShell>

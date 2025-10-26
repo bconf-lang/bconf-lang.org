@@ -1,0 +1,40 @@
+---
+import { getRelativeLocaleUrlList, getRelativeLocaleUrl } from "astro:i18n";
+import * as Switcher from "./switcher";
+
+const LOCALE_NAMES: Record<string, string> = {
+    en: "English",
+    fr: "Français",
+    cn: "简体中文",
+    jp: "日本語",
+    kr: "한국어",
+    pl: "Polski",
+    pg: "Português",
+};
+
+const currentLocale = String(Astro.currentLocale);
+
+const locales = getRelativeLocaleUrlList().map((l): Switcher.SwitcherItem => {
+    const locale = l.split("/")[1];
+    return {
+        displayText: LOCALE_NAMES[locale] ?? locale,
+        active: locale === currentLocale,
+        href: getRelativeLocaleUrl(locale ?? currentLocale),
+        as: "a",
+    };
+});
+---
+
+<Switcher.Root>
+    <Switcher.Trigger>{LOCALE_NAMES[currentLocale] ?? currentLocale}</Switcher.Trigger>
+    <Switcher.ItemsRoot>
+        {
+            locales.map((locale) => (
+                <Switcher.Item as="a" active={locale.active} href={locale.href}>
+                    {locale.displayText}
+                </Switcher.Item>
+            ))
+        }
+    </Switcher.ItemsRoot>
+    <!-- <Switcher.Items items={locales} /> -->
+</Switcher.Root>

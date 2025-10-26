@@ -1,13 +1,11 @@
 ---
 import "../styles/global.css";
-import Header from "@components/header/Header.astro";
 
 type Props = {
     title?: string;
-    header?: boolean;
 };
 
-const { title, header } = Astro.props;
+const { title } = Astro.props;
 ---
 
 <!doctype html>
@@ -35,13 +33,6 @@ const { title, header } = Astro.props;
     </head>
 
     <body class="relative bg-neutral-100 text-neutral-800 dark:bg-neutral-900 dark:text-neutral-100">
-        {
-            header && (
-                <Header>
-                    <slot name="after-header" />
-                </Header>
-            )
-        }
         <slot />
     </body>
 </html>

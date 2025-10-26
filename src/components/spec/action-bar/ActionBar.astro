@@ -1,0 +1,22 @@
+---
+import GitHubLink from "@components/GitHubLink.astro";
+import LanguageSwitcher from "./LanguageSwitcher.astro";
+import SpecSwitcher from "./SpecSwitcher.astro";
+import ThemeSwitcher from "./ThemeSwitcher.astro";
+import { SidebarCollapseIcon } from "@components/ui/icons";
+---
+
+<div
+    class="top-0 right-0 flex items-center justify-center gap-2 p-4 group-data-[state=collapsed]/sidebar:fixed lg:justify-normal"
+>
+    <GitHubLink size="32" class="rounded-full bg-neutral-100 dark:bg-neutral-800" />
+    <SpecSwitcher />
+    <LanguageSwitcher />
+    <ThemeSwitcher />
+    <button
+        id="collapse-sidebar"
+        class="hidden rounded-md bg-neutral-200 p-1 text-neutral-800 group-data-[state=expanded]/sidebar:rotate-180 lg:block"
+    >
+        <SidebarCollapseIcon size="32" />
+    </button>
+</div>

@@ -3,11 +3,12 @@ import { GithubIcon, type IconProps } from "@components/ui/icons";
 
 type Props = {
     size?: IconProps["size"];
+    class?: string;
 };
 
-const { size = 48 } = Astro.props;
+const { class: className, size = 48 } = Astro.props;
 ---
 
-<a href="https://github.com/bconf-lang/bconf" aria-label="bconf GitHub">
+<a href="https://github.com/bconf-lang/bconf" aria-label="bconf GitHub" class={className}>
     <GithubIcon size={size} />
 </a>

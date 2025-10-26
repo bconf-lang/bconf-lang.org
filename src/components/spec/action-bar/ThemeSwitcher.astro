@@ -1,0 +1,33 @@
+---
+import * as Theme from "@components/theme-selector";
+import { BrightnessIcon, SunlightIcon, MoonIcon } from "@components/ui/icons";
+import * as Switcher from "./switcher";
+---
+
+<Switcher.Root>
+    <Theme.Root>
+        <Switcher.Trigger>
+            <div class="text-inherit">
+                <BrightnessIcon class="group-not-data-[active-theme=device]/theme:hidden" />
+                <SunlightIcon class="group-not-data-[active-theme=light]/theme:hidden" />
+                <MoonIcon class="group-not-data-[active-theme=dark]/theme:hidden" />
+            </div>
+        </Switcher.Trigger>
+
+        <Theme.TogglesRoot>
+            <Switcher.ItemsRoot class="">
+                <Switcher.Item custom>
+                    <Theme.AutoToggle class="rounded-none p-4">Auto</Theme.AutoToggle>
+                </Switcher.Item>
+
+                <Switcher.Item custom>
+                    <Theme.LightToggle class="rounded-none p-4">Light</Theme.LightToggle>
+                </Switcher.Item>
+
+                <Switcher.Item custom>
+                    <Theme.DarkToggle class="rounded-none p-4">Dark</Theme.DarkToggle>
+                </Switcher.Item>
+            </Switcher.ItemsRoot>
+        </Theme.TogglesRoot>
+    </Theme.Root>
+</Switcher.Root>

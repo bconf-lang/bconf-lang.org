@@ -1,0 +1,40 @@
+---
+import { ChevronDownIcon } from "@components/ui/icons";
+---
+
+<div class="sticky top-0 flex w-full border-b border-b-neutral-400 bg-inherit lg:hidden">
+    <button id="menu-trigger" class="flex w-full items-center justify-between p-4 text-left text-xl font-semibold">
+        <span>bconf</span>
+        <ChevronDownIcon />
+    </button>
+</div>
+
+<script>
+    const menuTriggerEl = document.querySelector<HTMLButtonElement>("#menu-trigger")!;
+    menuTriggerEl.addEventListener("click", toggleMenu);
+
+    const sidebarEl = document.querySelector("aside")!;
+    const navEl = sidebarEl.querySelector("nav")!;
+
+    navEl.addEventListener("click", (e) => {
+        if (!menuTriggerEl.checkVisibility()) {
+            return;
+        }
+
+        if (e.target instanceof HTMLAnchorElement) {
+            toggleMenu();
+        }
+    });
+
+    function toggleMenu() {
+        const isVisible = !sidebarEl.classList.contains("hidden");
+
+        if (isVisible) {
+            sidebarEl.classList.add("hidden");
+            document.body.classList.remove("overflow-hidden");
+        } else {
+            sidebarEl.classList.remove("hidden");
+            document.body.classList.add("overflow-hidden");
+        }
+    }
+</script>

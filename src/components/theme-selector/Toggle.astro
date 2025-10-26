@@ -1,16 +1,16 @@
 ---
-type Props = {
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"button"> & {
     theme: string;
-    description: string;
 };
 
-const { theme, description } = Astro.props;
+const { theme, class: className } = Astro.props;
 ---
 
 <button
-    class="flex items-center gap-3 rounded-full p-2 text-neutral-800 group-data-collapsed:rounded-none group-data-collapsed:px-6 group-data-collapsed:py-4 hover:bg-neutral-300 data-active:bg-neutral-300"
     data-theme={theme}
+    class:list={["flex items-center gap-3 rounded-full p-2 text-neutral-800 hover:bg-neutral-300", className]}
 >
     <slot />
-    <p class="font-medium group-not-data-collapsed:hidden">{description}</p>
 </button>

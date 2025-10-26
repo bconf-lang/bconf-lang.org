@@ -1,8 +1,8 @@
 ---
 import type { MarkdownHeading } from "astro";
-// import SpecSwitcher from "./SpecSwitcher.astro";
-import TableOfContents from "./TableOfContents.astro";
 import { buildHeadingTree } from "@utils/markdown";
+import ActionBar from "./action-bar/ActionBar.astro";
+import TableOfContents from "./TableOfContents.astro";
 
 type Props = {
     headings: MarkdownHeading[];
@@ -12,9 +12,21 @@ const { headings } = Astro.props;
 ---
 
 <aside
-    id="toc-nav"
-    class="fixed top-(--mobile-header-height) right-0 left-0 z-40 hidden max-h-[calc(100vh-var(--mobile-header-height))] overflow-y-auto border-r border-neutral-400 bg-inherit p-4 md:sticky md:top-(--header-height) md:block md:max-h-[calc(100vh-var(--header-height))]"
+    data-state="expanded"
+    class="group/sidebar fixed top-(--mobile-header-height) right-0 left-0 z-10 hidden max-h-[calc(100vh-var(--mobile-header-height))] overflow-y-auto border-neutral-200 bg-inherit data-[state=collapsed]:w-0 data-[state=expanded]:border-l lg:sticky lg:top-0 lg:block lg:max-h-screen"
 >
-    <!-- <SpecSwitcher /> -->
-    <TableOfContents headings={buildHeadingTree(headings, { skipDepthOne: true })} />
+    <ActionBar />
+    <div class="p-4 pt-0">
+        <TableOfContents headings={buildHeadingTree(headings, { skipDepthOne: true })} />
+    </div>
 </aside>
+
+<script>
+    const asideEl = document.querySelector<HTMLButtonElement>(".group\\/sidebar")!;
+    const collapseSidebarBtn = document.querySelector<HTMLButtonElement>("#collapse-sidebar")!;
+
+    collapseSidebarBtn.addEventListener("click", () => {
+        const prevState = asideEl.getAttribute("data-state") ?? "collapsed";
+        asideEl.setAttribute("data-state", prevState === "expanded" ? "collapsed" : "expanded");
+    });
+</script>

@@ -1,0 +1,15 @@
+---
+import { BrightnessIcon } from "@components/ui/icons";
+import Toggle from "../toggle.astro";
+
+type Props = {
+    class?: string;
+};
+
+const { class: className } = Astro.props;
+---
+
+<Toggle theme="device" class:list={["group-data-[active-theme=device]/theme:bg-neutral-300", className]}>
+    <BrightnessIcon />
+    <slot />
+</Toggle>

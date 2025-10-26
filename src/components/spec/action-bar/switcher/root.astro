@@ -1,0 +1,37 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"div">;
+
+const { class: className, ...props } = Astro.props;
+---
+
+<div {...props} data-state="collapsed" class:list={["group/switcher relative bg-inherit", className]}>
+    <slot />
+</div>
+
+<script>
+    const switchers = document.querySelectorAll<HTMLDivElement>(".group\\/switcher");
+    for (const switcher of switchers) {
+        const trigger = switcher.querySelector(".group\\/trigger");
+        trigger?.addEventListener("click", () => {
+            toggleSwitcher(switcher);
+        });
+
+        window.addEventListener("click", (e) => {
+            if (!e.target) {
+                return;
+            }
+
+            const prevState = switcher.getAttribute("data-state") ?? "expanded";
+            if (!switcher.contains(e.target as Node) && prevState === "expanded") {
+                toggleSwitcher(switcher);
+            }
+        });
+    }
+
+    function toggleSwitcher(el: HTMLDivElement) {
+        const prevState = el.getAttribute("data-state") ?? "expanded";
+        el.setAttribute("data-state", prevState === "collapsed" ? "expanded" : "collapsed");
+    }
+</script>

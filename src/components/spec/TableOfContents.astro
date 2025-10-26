@@ -9,7 +9,7 @@ type Props = {
 const { headings, nested = false } = Astro.props;
 ---
 
-<nav>
+<nav id="toc-nav">
     <ul class:list={["flex flex-col gap-2", nested && "mt-2 border-l border-l-neutral-300 pl-4"]}>
         {
             headings.map((item) => (
@@ -26,7 +26,7 @@ const { headings, nested = false } = Astro.props;
 
 <script>
     const headings = Array.from(document.querySelectorAll("main h2, main h3, main h4, main h5, main h6"));
-    const sidebarLinks = Array.from<HTMLAnchorElement>(document.querySelectorAll("aside > nav a"));
+    const sidebarLinks = Array.from<HTMLAnchorElement>(document.querySelectorAll("#toc-nav a"));
     const menuTriggerTextEl = document.querySelector("#menu-trigger > span")!;
 
     let lastScrollY = window.scrollY;

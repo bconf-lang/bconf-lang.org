@@ -1,0 +1,19 @@
+---
+import type { HTMLTag, Polymorphic } from "astro/types";
+
+type Props<Tag extends HTMLTag = "ul"> = Polymorphic<{
+    as: Tag;
+}>;
+
+const { as: Component = "ul", class: className, ...props } = Astro.props;
+---
+
+<Component
+    {...props}
+    class:list={[
+        "group/items absolute top-full left-1/2 z-10 flex min-w-full -translate-x-1/2 flex-col overflow-hidden rounded-md bg-neutral-200 text-neutral-800 group-data-[state=collapsed]/switcher:hidden",
+        className,
+    ]}
+>
+    <slot />
+</Component>
