@@ -8,7 +8,7 @@ const currentSpec = inferSpecVersionFromPath(Astro.url.pathname);
 const specs: Array<{ text: string; active: boolean; href: string }> = [];
 const pages = import.meta.glob("../../../pages/**");
 
-for (const fileUri of Object.keys(pages)) {
+for (const fileUri of Object.keys(pages).reverse()) {
     const urlPath = fileUri.replace("../../../pages/", "");
     // Skipping the required `index.md` at the top level
     // to only handle localized paths
