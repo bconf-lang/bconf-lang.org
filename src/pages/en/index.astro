@@ -10,7 +10,7 @@ const locale = Astro.currentLocale ?? "en";
 
 const example = `// This is a bconf file
 extends "./base.bconf"
-import from "./secrets.bconf" { $db_user, $db_pass as $database_password }
+import from "./secrets.bconf" { $db_user; $db_pass as $database_password }
 
 $app_name = "An awesome app"
 $env = env("APP_ENV")
@@ -40,8 +40,8 @@ database.primary {
 }
 
 database.replicas = [
-    { host = "replica1.db.internal", user = $db_user },
-    { host = "replica2.db.internal", user = $db_user }
+    { host = "replica1.db.internal"; user = $db_user },
+    { host = "replica2.db.internal"; user = $db_user }
 ]
 
 database.replicas[0].read_only = true
@@ -88,7 +88,7 @@ export vars {
             </div>
 
             <a
-                href={getRelativeLocaleUrl(locale, "/specs/v0.1.0")}
+                href={getRelativeLocaleUrl(locale, "/specs/v0.1.1")}
                 class="bg-accent flex w-fit items-center justify-between gap-2 rounded-md px-8 py-4 text-xl text-neutral-800 no-underline transition-colors hover:bg-red-300"
             >
                 <span>Read the spec</span>
