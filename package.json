@@ -2,6 +2,7 @@
     "name": "bconf-lang.org",
     "type": "module",
     "version": "0.0.1",
+    "packageManager": "pnpm@10.32.1",
     "scripts": {
         "dev": "astro dev",
         "build": "astro build",
@@ -12,23 +13,23 @@
         "prepare": "husky"
     },
     "dependencies": {
-        "@tailwindcss/vite": "^4.1.14",
-        "astro": "^5.14.1",
-        "tailwindcss": "^4.1.14"
+        "@tailwindcss/vite": "^4.2.2",
+        "astro": "^6.0.6",
+        "tailwindcss": "^4.2.2"
     },
     "devDependencies": {
-        "@astrojs/markdown-remark": "^6.3.8",
-        "@eslint/js": "^9.38.0",
-        "@typescript-eslint/parser": "^8.46.2",
-        "eslint": "^9.38.0",
-        "eslint-plugin-astro": "^1.3.1",
-        "eslint-plugin-prettier": "^5.5.4",
-        "globals": "^16.4.0",
+        "@astrojs/markdown-remark": "^7.0.1",
+        "@eslint/js": "^9.39.4",
+        "@typescript-eslint/parser": "^8.57.1",
+        "eslint": "^9.39.4",
+        "eslint-plugin-astro": "^1.6.0",
+        "eslint-plugin-prettier": "^5.5.5",
+        "globals": "^16.5.0",
         "husky": "^9.1.7",
-        "lint-staged": "^16.2.6",
+        "lint-staged": "^16.4.0",
         "prettier": "3.6.2",
         "prettier-plugin-astro": "0.14.1",
         "prettier-plugin-tailwindcss": "0.7.1",
-        "typescript-eslint": "^8.46.2"
+        "typescript-eslint": "^8.57.1"
     }
 }
