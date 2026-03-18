@@ -15,11 +15,9 @@ jobs:
     build:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
             - name: Build site
-              uses: withastro/action@v3
-              with:
-                  package-manager: pnpm@latest
+              uses: withastro/action@v5
 
     deploy:
         needs: build
