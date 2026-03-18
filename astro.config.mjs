@@ -10,6 +10,7 @@ import bconfTmLang from "./public/bconf.tmLanguage.json";
 export default defineConfig({
     site: "https://bconf-lang.org",
     output: "static",
+    trailingSlash: "never",
     markdown: {
         rehypePlugins: [rehypeHeadingIds, rehypeSelfLinkHeadings],
         remarkPlugins: [setDefaultShellLayout],
