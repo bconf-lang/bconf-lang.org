@@ -15,6 +15,7 @@ import from "./secrets.bconf" { $db_user; $db_pass as $database_password }
 
 $app_name = "An awesome app"
 $env = env("APP_ENV")
+$common_domains = ["https://app.example.com", "https://admin.example.com"]
 
 app {
     name = $app_name
@@ -48,11 +49,6 @@ database.replicas = [
 database.replicas[0].read_only = true
 database.replicas[1].read_only = false
 
-database.meta[primary] = ref(database.primary.host)
-database.meta[replica_count] = 2
-database.region_map = <us-east: "us-east-1", us-west: "us-west-2", eu: "eu-central-1">
-database.primary.region = ref(database.region_map[us-east])
-
 plugins << {
     name = "authentication"
     config {
@@ -67,7 +63,7 @@ plugins << {
 plugins << {
     name = "cors"
     config {
-        allowed_origins = ["https://app.example.com", "https://admin.example.com"]
+        allowed_origins = [...$common_domains, "staging.example.com"]
     }
 }
 
@@ -97,7 +93,7 @@ export vars {
             </div>
 
             <a
-                href={getRelativeLocaleUrl(locale, "/specs/v0.2.0")}
+                href={getRelativeLocaleUrl(locale, "/specs/v0.3.0")}
                 class="bg-accent flex w-fit items-center justify-between gap-2 rounded-md px-8 py-4 text-xl text-neutral-800 no-underline transition-colors hover:bg-red-300"
             >
                 <span>Read the spec</span>
