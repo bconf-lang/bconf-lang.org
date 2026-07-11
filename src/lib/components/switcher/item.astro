@@ -1,0 +1,40 @@
+---
+import type { HTMLTag, Polymorphic } from "astro/types";
+
+type Props<Tag extends HTMLTag = HTMLTag> = Polymorphic<{
+    as: Tag;
+    active?: boolean;
+    value: string;
+    text: string;
+}>;
+
+const { as: Component = "button", class: className, active, value, text, ...props } = Astro.props;
+---
+
+<li
+    data-value={value}
+    class:list={[
+        "group/switcher-item w-full rounded-md px-1.5 py-1 hover:bg-neutral-300",
+        active && "bg-neutral-300",
+        className,
+    ]}
+>
+    <Component class="flex w-full items-center gap-2" {...props}>
+        <slot name="icon-left" />
+        {text}
+        <slot name="icon-right" />
+    </Component>
+</li>
+
+<script>
+    const items = document.querySelectorAll(".group\\/switcher-item");
+    items.forEach((el) => {
+        el.addEventListener("click", () => {
+            const event = new CustomEvent("switcher:itemselect", {
+                detail: { value: el.getAttribute("data-value") },
+                bubbles: true,
+            });
+            el.dispatchEvent(event);
+        });
+    });
+</script>

@@ -1,0 +1,25 @@
+---
+import { XIcon } from "@lib/icons";
+import { ThemeSwitcher } from "@lib/theme";
+import { LanguageSwitcher } from "@lib/locale";
+import GithubLink from "@lib/components/github-link.astro";
+import VersionSwitcher from "./version-switcher.astro";
+---
+
+<div class="sticky top-0 left-0 flex items-center justify-between border-b border-b-neutral-300 bg-inherit p-4">
+    <div class="flex items-center gap-2">
+        <GithubLink class="pr-1" size="32" />
+        <VersionSwitcher />
+        <LanguageSwitcher />
+        <ThemeSwitcher />
+    </div>
+    <button id="mobile-close-button" class="lg:hidden"><XIcon stroke-width="2" /></button>
+</div>
+
+<script>
+    const sidebar = document.querySelector("aside#sidebar");
+    const closeButtonEl = document.querySelector<HTMLButtonElement>("button#mobile-close-button");
+    closeButtonEl?.addEventListener("click", () => {
+        sidebar?.setAttribute("data-mobile-state", "closed");
+    });
+</script>

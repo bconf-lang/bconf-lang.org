@@ -1,0 +1,37 @@
+---
+import * as Switcher from "@lib/components/switcher";
+import { inferSpecVersionFromPath, sortSpecsDescending } from "@lib/utils/specs";
+
+const currLang = Astro.currentLocale ?? "en";
+const parts = Astro.url.pathname.split("/");
+const currVersion = parts[parts.length - 1];
+
+const paths = Object.keys(import.meta.glob("../../../pages/*/specs/*"));
+
+const specs = sortSpecsDescending(
+    paths.filter((path) => path.startsWith(`../../../pages/${currLang}`)).map((path) => inferSpecVersionFromPath(path))
+);
+---
+
+<Switcher.Root name="version">
+    <Switcher.Trigger
+        ><span class="inline-block max-w-16 overflow-hidden text-nowrap text-ellipsis">{currVersion}</span
+        ></Switcher.Trigger
+    >
+    <Switcher.ItemsRoot>
+        {
+            specs.map((version) => {
+                const versionToUse = `v${version}`;
+                return (
+                    <Switcher.Item
+                        as="a"
+                        active={versionToUse === currVersion}
+                        href={`/${currLang}/specs/${versionToUse}`}
+                        value={versionToUse}
+                        text={versionToUse}
+                    />
+                );
+            })
+        }
+    </Switcher.ItemsRoot>
+</Switcher.Root>

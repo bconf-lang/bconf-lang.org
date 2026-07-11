@@ -1,0 +1,60 @@
+---
+import * as Switcher from "@lib/components/switcher";
+import { LaptopIcon, MoonIcon, SunlightIcon } from "@lib/icons";
+
+type Props = {
+    placement?: "above" | "below";
+};
+
+const { placement = "below" } = Astro.props;
+---
+
+<Switcher.Root name="theme" placement={placement}>
+    <Switcher.Trigger>
+        <div class="flex items-center gap-2">
+            <div>
+                <LaptopIcon class="group-not-data-[selected-theme=auto]/root:hidden" />
+                <MoonIcon class="group-not-data-[selected-theme=dark]/root:hidden" />
+                <SunlightIcon class="group-not-data-[selected-theme=light]/root:hidden" />
+            </div>
+            <div class="not-lg:hidden">
+                <span class="group-not-data-[selected-theme=auto]/root:hidden">Auto</span>
+                <span class="group-not-data-[selected-theme=light]/root:hidden">Light</span>
+                <span class="group-not-data-[selected-theme=dark]/root:hidden">Dark</span>
+            </div>
+        </div>
+    </Switcher.Trigger>
+    <Switcher.ItemsRoot>
+        <Switcher.Item value="auto" text="Auto">
+            <LaptopIcon slot="icon-left" />
+        </Switcher.Item>
+        <Switcher.Item value="dark" text="Dark">
+            <MoonIcon slot="icon-left" />
+        </Switcher.Item>
+        <Switcher.Item value="light" text="Light">
+            <SunlightIcon slot="icon-left" />
+        </Switcher.Item>
+    </Switcher.ItemsRoot>
+</Switcher.Root>
+
+<script>
+    const allowedThemes = ["auto", "dark", "light"];
+
+    const themeSwitchers = document.querySelectorAll("[data-switcher='theme']");
+    themeSwitchers.forEach((el) => {
+        el.addEventListener("switcher:itemselect", ((e: CustomEvent) => {
+            let theme = e.detail.value;
+            if (!allowedThemes.includes(theme)) {
+                theme = "auto";
+            }
+
+            document.documentElement.setAttribute("data-selected-theme", theme);
+            document.documentElement.setAttribute("data-theme", theme === "auto" ? inferTheme() : theme);
+            localStorage.setItem("theme", theme);
+        }) as EventListener);
+    });
+
+    function inferTheme() {
+        return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+</script>

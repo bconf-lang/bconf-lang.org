@@ -1,12 +1,8 @@
 ---
 import { Code } from "astro:components";
-import { getRelativeLocaleUrl } from "astro:i18n";
 import bconfLang from "../../../public/bconf.tmLanguage.json";
-import HomeShell from "@layouts/HomeShell.astro";
-import GitHubLink from "@components/GitHubLink.astro";
-import { ChevronRightIcon } from "@components/icons";
-
-const locale = Astro.currentLocale ?? "en";
+import HomeShell from "@layouts/home/shell.astro";
+import GithubLink from "@lib/components/github-link.astro";
 
 const example = `// This is a bconf file
 
@@ -85,19 +81,16 @@ export vars {
             <div class="mb-8 flex flex-col gap-4">
                 <div class="flex items-center justify-between gap-4">
                     <h1 class="text-7xl font-bold">bconf</h1>
-                    <GitHubLink />
+                    <GithubLink />
                 </div>
-                <p class="text-2xl">
-                    <span>A modern data-serialization format for better configurations</span>
-                </p>
+                <p class="text-2xl">A modern data-serialization format for better configurations</p>
             </div>
 
             <a
-                href={getRelativeLocaleUrl(locale, "/specs/v0.3.0")}
-                class="bg-accent flex w-fit items-center justify-between gap-2 rounded-md px-8 py-4 text-xl text-neutral-800 no-underline transition-colors hover:bg-red-300"
+                href="/en/specs/v0.3.0"
+                class="flex w-fit items-center justify-between gap-2 rounded-md bg-red-400 px-8 py-4 text-xl font-medium text-neutral-800 no-underline transition-colors hover:bg-red-300"
             >
-                <span>Read the spec</span>
-                <ChevronRightIcon class="mt-0.5" />
+                Read the spec
             </a>
         </div>
 

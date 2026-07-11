@@ -1,0 +1,12 @@
+---
+import { enhanceIconProps, type IconProps } from "./utils";
+
+type Props = IconProps;
+
+const props = enhanceIconProps(Astro.props);
+---
+
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <path d="M18 6 6 18"></path>
+    <path d="m6 6 12 12"></path>
+</svg>

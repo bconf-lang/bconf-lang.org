@@ -1,0 +1,64 @@
+---
+import type { HeadingNode } from "@lib/utils/markdown";
+
+type Props = {
+    headings: HeadingNode[];
+    indent?: boolean;
+};
+
+const { headings, indent = false } = Astro.props;
+---
+
+<nav class="px-4 py-2" id="toc-nav">
+    <ul class:list={["flex flex-col gap-2", indent && "border-l border-l-neutral-300 pl-2"]}>
+        {
+            headings.map((item) => (
+                <li>
+                    <a
+                        href={`#${item.slug}`}
+                        class="px-4 py-2 hover:font-bold hover:not-data-active:text-neutral-800 data-active:bg-neutral-200 data-active:font-bold dark:not-data-active:hover:text-neutral-50 dark:data-active:bg-neutral-200 dark:data-active:text-neutral-800"
+                    >
+                        {item.text}
+                    </a>
+                    {item.children.length > 0 && <Astro.self headings={item.children} indent />}
+                </li>
+            ))
+        }
+    </ul>
+</nav>
+
+<script>
+    const headings = [...document.querySelectorAll("main h2, main h3, main h4, main h5, main h6")];
+    const mobileHeaderTextEl = document.querySelector("#mobile-curr-section")!;
+
+    let currentActive = "";
+
+    function highlightSidebarLink(id: string) {
+        if (currentActive === id) {
+            return;
+        }
+
+        document.querySelector("#toc-nav a[data-active]")?.removeAttribute("data-active");
+
+        const link = document.querySelector(`#toc-nav a[href="#${id}"]`);
+        if (link) {
+            link.toggleAttribute("data-active");
+            currentActive = id;
+        }
+    }
+
+    const handleObserver: IntersectionObserverCallback = () => {
+        const active = headings.filter((h) => h.getBoundingClientRect().top <= 100).at(-1);
+        if (active) {
+            highlightSidebarLink(active.id);
+            mobileHeaderTextEl.textContent = active.textContent;
+        }
+    };
+
+    const observer = new IntersectionObserver(handleObserver, {
+        rootMargin: "-100px 0px -70% 0px",
+        threshold: 0,
+    });
+
+    headings.forEach((e) => observer.observe(e));
+</script>

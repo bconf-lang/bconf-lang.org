@@ -1,0 +1,18 @@
+---
+import { MenuIcon } from "@lib/icons";
+---
+
+<div class="sticky top-0 flex items-center gap-3 border-b border-b-neutral-300 bg-inherit p-3 shadow-sm lg:hidden">
+    <button id="sidebar-trigger-mobile">
+        <MenuIcon stroke-width="2" />
+    </button>
+    <span id="mobile-curr-section" class="font-bold">Introduction</span>
+</div>
+
+<script>
+    const sidebarEl = document.querySelector("aside#sidebar");
+    const triggerEl = document.querySelector<HTMLButtonElement>("button#sidebar-trigger-mobile");
+    triggerEl?.addEventListener("click", () => {
+        sidebarEl?.setAttribute("data-mobile-state", "open");
+    });
+</script>

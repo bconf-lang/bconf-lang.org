@@ -1,0 +1,40 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"div"> & {
+    name: string;
+    placement?: "above" | "below";
+};
+
+const { class: className, name, placement = "below", ...props } = Astro.props;
+---
+
+<div
+    data-switcher={name}
+    data-placement={placement}
+    data-state="collapsed"
+    class:list={["group/switcher relative inline-block w-fit", className]}
+    {...props}
+>
+    <slot />
+</div>
+
+<script>
+    const switchers = document.querySelectorAll(".group\\/switcher");
+    switchers.forEach((el) => {
+        el.addEventListener("switcher:trigger", () => {
+            const state = el.getAttribute("data-state");
+            el.setAttribute("data-state", state === "expanded" ? "collapsed" : "expanded");
+        });
+    });
+
+    document.addEventListener("click", (e) => {
+        switchers.forEach((el) => {
+            if (el.contains(e.target as Element)) {
+                return;
+            }
+
+            el.setAttribute("data-state", "collapsed");
+        });
+    });
+</script>

@@ -1,0 +1,35 @@
+---
+import type { MarkdownHeading } from "astro";
+import { buildHeadingTree } from "@lib/utils/markdown";
+import { TableOfContents } from "@lib/components/toc";
+import ActionBar from "./action-bar.astro";
+
+type Props = {
+    headings: MarkdownHeading[];
+};
+
+const { headings } = Astro.props;
+---
+
+<aside
+    id="sidebar"
+    data-mobile-state="closed"
+    class="fixed top-0 left-0 max-h-screen w-full space-y-2 overflow-y-auto border-l-neutral-300 bg-inherit not-lg:data-[mobile-state=closed]:hidden lg:sticky lg:block lg:border-l"
+>
+    <ActionBar />
+    <TableOfContents headings={buildHeadingTree(headings, { skipDepthOne: true })} />
+</aside>
+
+<script>
+    const tocEl = document.querySelector("#toc-nav");
+    const sidebarEl = document.querySelector("aside#sidebar");
+
+    // Even though the table of contents is only being used in the sidebar,
+    // trying not to tie specific sidebar logic to it. So this just captures
+    // any click inside the table of contents to automatically close it on mobile
+    tocEl?.addEventListener("click", (e) => {
+        if ((e.target as Element).tagName === "A") {
+            sidebarEl?.setAttribute("data-mobile-state", "closed");
+        }
+    });
+</script>

@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig } from "astro/config";
+import { unified } from "@astrojs/markdown-remark";
 import { rehypeHeadingIds } from "@astrojs/markdown-remark";
 import tailwindcss from "@tailwindcss/vite";
 import { rehypeSelfLinkHeadings } from "./plugins/rehype/selfLinkHeadings";
@@ -12,8 +13,10 @@ export default defineConfig({
     output: "static",
     trailingSlash: "never",
     markdown: {
-        rehypePlugins: [rehypeHeadingIds, rehypeSelfLinkHeadings],
-        remarkPlugins: [setDefaultShellLayout],
+        processor: unified({
+            rehypePlugins: [rehypeHeadingIds, rehypeSelfLinkHeadings],
+            remarkPlugins: [setDefaultShellLayout],
+        }),
         shikiConfig: {
             theme: "monokai",
             langs: [bconfTmLang],
@@ -24,7 +27,7 @@ export default defineConfig({
         locales: ["en"],
         routing: {
             prefixDefaultLocale: true,
-            redirectToDefaultLocale: true,
+            redirectToDefaultLocale: false,
         },
     },
     vite: {

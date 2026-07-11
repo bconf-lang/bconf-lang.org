@@ -1,0 +1,25 @@
+---
+import GithubLink from "@lib/components/github-link.astro";
+import { ThemeSwitcher } from "@lib/theme";
+import { LanguageSwitcher } from "@lib/locale";
+import BaseShell from "../_base.astro";
+
+// TODO: Create <link> tags for alternate languages
+---
+
+<BaseShell>
+    <main class="p-8">
+        <slot />
+    </main>
+
+    <footer class="flex w-full flex-col-reverse items-center justify-between gap-6 bg-red-400 px-6 py-3 sm:flex-row">
+        <p class="shrink-0">Created by <a class="font-medium underline" href="https://brodz.dev">Brody Neumann</a></p>
+        <div class="flex w-full items-center justify-between sm:justify-end">
+            <GithubLink size="32" class="pr-4" />
+            <div class="flex items-center gap-2 border-l-neutral-200 pl-4 sm:border-l">
+                <ThemeSwitcher placement="above" />
+                <LanguageSwitcher placement="above" />
+            </div>
+        </div>
+    </footer>
+</BaseShell>

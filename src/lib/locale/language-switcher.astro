@@ -1,0 +1,60 @@
+---
+import * as Switcher from "@lib/components/switcher";
+import { LanguagesIcon } from "@lib/icons";
+import { getLatestSpec, inferSpecVersionFromPath } from "@lib/utils/specs";
+
+type Props = {
+    placement?: "above" | "below";
+};
+
+const { placement = "below" } = Astro.props;
+
+const LANG_DISPLAY_TEXT: Record<string, string> = {
+    en: "English",
+};
+
+const currLang = Astro.currentLocale ?? "en";
+const paths = Object.keys(import.meta.glob("../../pages/*/specs/*")).map((path) => path.replace("../../pages/", ""));
+
+// lang: specs
+const langs = new Map<string, Set<string>>();
+for (const path of paths) {
+    const lang = path.split("/")[0];
+
+    if (!langs.has(lang)) {
+        langs.set(lang, new Set());
+    }
+
+    const langPaths = langs.get(lang)!;
+    // +2 to strip `/v`
+    const version = inferSpecVersionFromPath(path);
+    langPaths.add(version);
+}
+---
+
+<Switcher.Root name="language" placement={placement}>
+    <Switcher.Trigger>
+        <div class="flex items-center gap-1">
+            <LanguagesIcon />
+            <span class="inline-block max-w-16 overflow-hidden text-nowrap text-ellipsis not-lg:hidden"
+                >{LANG_DISPLAY_TEXT[currLang] ?? currLang}</span
+            >
+        </div>
+    </Switcher.Trigger>
+    <Switcher.ItemsRoot>
+        {
+            langs.entries().map(([code, specs]) => {
+                const path = `/${code}/specs/v${getLatestSpec(Array.from(specs))}`;
+                return (
+                    <Switcher.Item
+                        as="a"
+                        active={code === currLang}
+                        href={path}
+                        value={code}
+                        text={LANG_DISPLAY_TEXT[code] ?? code}
+                    />
+                );
+            })
+        }
+    </Switcher.ItemsRoot>
+</Switcher.Root>

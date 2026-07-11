@@ -1,0 +1,17 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"ul">;
+
+const { class: className, ...props } = Astro.props;
+---
+
+<ul
+    {...props}
+    class:list={[
+        "group/items-root absolute left-1/2 my-1 min-w-full -translate-x-1/2 rounded-lg bg-neutral-200 p-1 group-data-[placement=above]/switcher:bottom-full group-data-[state=collapsed]/switcher:hidden dark:bg-neutral-200 dark:text-neutral-800",
+        className,
+    ]}
+>
+    <slot />
+</ul>

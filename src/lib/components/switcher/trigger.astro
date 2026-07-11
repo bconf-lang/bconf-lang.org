@@ -1,0 +1,31 @@
+---
+import { ChevronDownIcon } from "@lib/icons";
+
+type Props = {
+    class?: string;
+};
+
+const { class: className } = Astro.props;
+---
+
+<button
+    class:list={[
+        "group/switcher-trigger flex w-full items-center gap-2 rounded-sm bg-neutral-200 px-2.5 py-1.5 dark:text-neutral-800",
+        className,
+    ]}
+>
+    <slot />
+    <ChevronDownIcon size="16" class="mt-px transition-all group-data-[state=expanded]/switcher:rotate-180" />
+</button>
+
+<script>
+    const triggers = document.querySelectorAll(".group\\/switcher-trigger");
+    triggers.forEach((el) => {
+        el.addEventListener("click", () => {
+            const event = new CustomEvent("switcher:trigger", {
+                bubbles: true,
+            });
+            el.dispatchEvent(event);
+        });
+    });
+</script>

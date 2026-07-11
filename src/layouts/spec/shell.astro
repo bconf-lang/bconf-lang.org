@@ -1,0 +1,25 @@
+---
+import "../../styles/specs.css";
+
+import type { MarkdownLayoutProps } from "astro";
+import { inferSpecVersionFromPath } from "@lib/utils/specs";
+import BaseShell from "../_base.astro";
+import MobileHeader from "./components/mobile-header.astro";
+import Sidebar from "./components/sidebar.astro";
+
+type Props = MarkdownLayoutProps<Record<string, unknown>>;
+
+const { headings } = Astro.props;
+
+// TODO: Create <link> tags for alternate languages
+---
+
+<BaseShell title={`bconf: Spec v${inferSpecVersionFromPath(Astro.url.pathname)}`}>
+    <div class="grid grid-cols-1 bg-inherit lg:grid-cols-[minmax(0px,1fr)_auto]">
+        <MobileHeader />
+        <main class="px-8 pb-4">
+            <slot />
+        </main>
+        <Sidebar headings={headings} />
+    </div>
+</BaseShell>

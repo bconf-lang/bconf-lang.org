@@ -7,10 +7,14 @@ main {
     h4[id],
     h5[id],
     h6[id] {
-        @apply relative before:absolute before:-left-5 before:text-gray-400 before:opacity-0 before:transition-transform before:content-['#'] hover:before:translate-x-0.5 hover:before:opacity-100;
+        @apply flex items-center gap-2;
 
-        a {
-            @apply text-inherit no-underline;
+        &:hover > a {
+            @apply inline;
+        }
+
+        & > a {
+            @apply hidden text-inherit no-underline;
         }
     }
 
@@ -20,7 +24,7 @@ main {
     h4,
     h5,
     h6 {
-        @apply scroll-mt-(--mobile-header-height) lg:scroll-mt-0;
+        @apply scroll-mt-16 lg:scroll-mt-4;
     }
 
     h1 {

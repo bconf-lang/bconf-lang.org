@@ -3,10 +3,10 @@
     "include": [".astro/types.d.ts", "**/*"],
     "exclude": ["dist"],
     "compilerOptions": {
+        "plugins": [{ "name": "@astrojs/ts-plugin" }],
         "paths": {
             "@layouts/*": ["./src/layouts/*"],
-            "@components/*": ["./src/components/*"],
-            "@utils/*": ["./src/utils/*"]
+            "@lib/*": ["./src/lib/*"]
         }
     }
 }

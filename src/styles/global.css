@@ -1,14 +1,6 @@
 @import "tailwindcss";
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
-@theme {
-    --color-accent: #ff6e6e;
-}
-
-:root {
-    --mobile-header-height: 61px; /* +1 pixel to account for bottom border */
-}
-
 html {
     @apply scroll-smooth;
 }
