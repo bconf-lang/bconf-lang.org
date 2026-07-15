@@ -12,14 +12,16 @@ import BaseShell from "../_base.astro";
         <slot />
     </main>
 
-    <footer class="flex w-full flex-col-reverse items-center justify-between gap-6 bg-red-400 px-6 py-3 sm:flex-row">
-        <p class="shrink-0">Created by <a class="font-medium underline" href="https://brodz.dev">Brody Neumann</a></p>
-        <div class="flex w-full items-center justify-between sm:justify-end">
-            <GithubLink size="32" class="pr-4" />
+    <footer class="flex w-full flex-col items-center justify-between gap-3 bg-red-400 px-6 py-3 sm:flex-row-reverse">
+        <div class="flex w-full items-center justify-center sm:justify-end">
+            <GithubLink size="32" class="sm:pr-4" />
             <div class="flex items-center gap-2 border-l-neutral-200 pl-4 sm:border-l">
                 <ThemeSwitcher placement="above" />
                 <LanguageSwitcher placement="above" />
             </div>
         </div>
+        <p class="shrink-0 border-t-neutral-200 text-center not-sm:w-full not-sm:border-t not-sm:pt-3">
+            Created by <a class="font-medium underline" href="https://brodz.dev">Brody Neumann</a>
+        </p>
     </footer>
 </BaseShell>

@@ -45,7 +45,8 @@ main {
         @apply my-4 text-lg font-bold;
     }
 
-    p {
+    p,
+    pre {
         @apply my-4;
     }
 

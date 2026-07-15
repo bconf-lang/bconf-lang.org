@@ -3,192 +3,255 @@ import { Code } from "astro:components";
 import bconfLang from "../../../public/bconf.tmLanguage.json";
 import HomeShell from "@layouts/home/shell.astro";
 import GithubLink from "@lib/components/github-link.astro";
+import BconfIcon from "../../../public/logo.svg";
 
 const example = `// This is a bconf file
 
-extends "./base.bconf"
-import from "./secrets.bconf" { $db_user; $db_pass as $database_password }
+@extends "./base.bconf"
+$app_env = env("APP_ENV")
 
-$app_name = "An awesome app"
-$env = env("APP_ENV")
-$common_domains = ["https://app.example.com", "https://admin.example.com"]
+title = "bconf example"
+env = $app_env
 
-app {
-    name = $app_name
-    environment = $env
-    features {
-        auth
-    }
-}
-
-server.http.host = "0.0.0.0"
-server.http.port = int(env("PORT"))
-
-server.tls {
-    enabled
-    cert_file = "/etc/ssl/certs/app.crt"
-    key_file = "/etc/ssl/private/app.key"
-}
-
-database.primary {
-    host = "primary.db.internal"
-    user = $db_user
-    pass = $database_password
-    pool_size = int(env("DB_POOL_SIZE"))
-}
-
-database.replicas = [
-    { host = "replica1.db.internal"; user = $db_user },
-    { host = "replica2.db.internal"; user = $db_user }
+admins = [
+    { name = "John Doe"; email = "john@example.com" },
+    { name = "Jane Smith"; email = "jane@example.com" }
 ]
 
-database.replicas[0].read_only = true
-database.replicas[1].read_only = false
+admins[0] = {
+    name = "Cooler John Doe"
+    email = "coolerjohn@example.com"
+}
 
-plugins << {
-    name = "authentication"
-    config {
-        jwt_secret = env("JWT_SECRET")
-        token_expiry = (
-            | eq($env, "prod") => "1hr"
-            | "6hr"
-        )
+server {
+    port = env("PORT")
+    timeout_ms = 30_000
+    cors {
+        enabled
+        allowed_origins = ["https://example.com", "https://\${$app_env}.example.com"]
     }
 }
 
-plugins << {
-    name = "cors"
-    config {
-        allowed_origins = [...$common_domains, "staging.example.com"]
-    }
-}
-
-api_docs_header = """
-    Welcome to the API for \${$app_name}.
-    Host: \${ref(server.http.host)}:\${ref(server.http.port)}
-    Environment: \${$env}
-"""
-
-export vars {
-    $env
-    $app_name as $name
-}`;
+server.max_connections = 4`;
 ---
 
 <HomeShell>
-    <div class="mx-auto grid max-w-7xl grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-[1fr_1.5fr] lg:grid-rows-[auto_1fr]">
-        <div>
-            <div class="mb-8 flex flex-col gap-4">
-                <div class="flex items-center justify-between gap-4">
-                    <h1 class="text-7xl font-bold">bconf</h1>
-                    <GithubLink />
+    <section class="grid grid-flow-row grid-cols-1 gap-12 lg:grid-cols-2">
+        <div class="flex flex-col space-y-8">
+            <div class="flex items-center justify-between gap-4">
+                <div class="flex items-center gap-2">
+                    <a href={Astro.url.pathname} class="h-12.5">
+                        <BconfIcon height="100%" width="100%" />
+                    </a>
+                    <p class="text-lg font-medium">v0.4.0</p>
                 </div>
-                <p class="text-2xl">A modern data-serialization format for better configurations</p>
+                <GithubLink />
             </div>
-
-            <a
-                href="/en/specs/v0.3.0"
-                class="flex w-fit items-center justify-between gap-2 rounded-md bg-red-400 px-8 py-4 text-xl font-medium text-neutral-800 no-underline transition-colors hover:bg-red-300"
-            >
-                Read the spec
-            </a>
+            <div class="space-y-4">
+                <h1 class="text-8xl font-bold">bconf</h1>
+                <p class="text-2xl">An enhanced data-serialization format for better configuration files</p>
+                <a
+                    href="/en/specs/v0.4.0"
+                    class="mt-8 flex w-fit items-center justify-between gap-2 rounded-md bg-red-400 px-8 py-4 text-xl font-medium text-neutral-800 no-underline transition-colors hover:bg-red-300"
+                >
+                    Read the spec
+                </a>
+            </div>
         </div>
+        <Code code={example} theme="monokai" lang={bconfLang} />
+    </section>
 
-        <Code class="row-span-2" code={example} theme="monokai" lang={bconfLang} />
-
-        <div class="mt-8 flex flex-col gap-12">
-            <div class="flex flex-col gap-4">
-                <h2 class="flex items-center gap-4 text-3xl font-semibold">
-                    <div class="rounded-full bg-neutral-200 p-3 text-neutral-800">
-                        <svg
-                            aria-hidden="true"
-                            class="w-8"
-                            stroke-width="1.5"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                            color="currentColor"
-                        >
-                            <path
-                                d="M4 19V5C4 3.89543 4.89543 3 6 3H19.4C19.7314 3 20 3.26863 20 3.6V16.7143"
-                                stroke="currentColor"
-                                stroke-linecap="round"></path>
-                            <path d="M6 17L20 17" stroke="currentColor" stroke-linecap="round"></path>
-                            <path d="M6 21L20 21" stroke="currentColor" stroke-linecap="round"></path>
-                            <path
-                                d="M6 21C4.89543 21 4 20.1046 4 19C4 17.8954 4.89543 17 6 17"
-                                stroke="currentColor"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"></path>
-                            <path d="M9 7L15 7" stroke="currentColor" stroke-linecap="round"></path>
-                        </svg>
-                    </div>
-                    <span>Human Readable</span>
-                </h2>
-                <p class="text-xl">
-                    bconf offers a clean, familiar syntax that is easy to read and learn. The syntax and concepts should
-                    be familiar to anyone who has programmed, leveraging common constructs found in other formats and
-                    programming languages
+    <div class="mt-12 grid grid-cols-1 gap-12 lg:grid-cols-3">
+        <div>
+            <p class="flex items-center gap-4 text-xl font-bold">
+                <span class="rounded-full bg-red-400 p-3 text-neutral-100">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        ><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path
+                            d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"
+                        ></path></svg
+                    >
+                </span>
+                Composable
+            </p>
+            <div class="mt-4 space-y-2 text-lg">
+                <p>
+                    bconf is designed with a single objective in mind: make it easy to compose large or complex
+                    configurations.
+                </p>
+                <p>It is trivial to breakdown and organize large objects or arrays into more manageable chunks.</p>
+            </div>
+        </div>
+        <div>
+            <p class="flex items-center gap-4 text-xl font-bold">
+                <span class="rounded-full bg-red-400 p-3 text-neutral-100">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        ><path
+                            d="M10 22V7a1 1 0 0 0-1-1H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5a1 1 0 0 0-1-1H2"
+                        ></path><rect x="14" y="2" width="8" height="8" rx="1"></rect></svg
+                    >
+                </span>
+                Flexible
+            </p>
+            <div class="mt-4 space-y-2 text-lg">
+                <p>
+                    Built-in dynamic features such as reading an environment variable, extended files and
+                    importing/exporting variables use generic syntax.
+                </p>
+                <p>
+                    This means it is easy to implement custom modifiers and directives to enable common logic specific
+                    for your needs.
                 </p>
             </div>
-
-            <div class="flex flex-col gap-4">
-                <h2 class="flex items-center gap-4 text-3xl font-semibold">
-                    <div class="rounded-full bg-neutral-200 p-3 text-neutral-800">
-                        <svg
-                            aria-hidden="true"
-                            class="w-8"
-                            stroke-width="1.5"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                            color="currentColor"
-                            ><path d="M20 20H4V4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                            ></path>
-                            <path
-                                d="M4 16.5L12 9L15 12L19.5 7.5"
-                                stroke="currentColor"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"></path>
-                        </svg>
-                    </div>
-                    <span>Scalable</span>
-                </h2>
-                <p class="text-xl/8">
-                    Modularity is at the core of bconf, with support for variables and extending other documents. Deeply
-                    nested keys can be defined inline, making it easy to scale and maintain larger files
-                </p>
-            </div>
-
-            <div class="flex flex-col gap-4">
-                <h2 class="flex items-center gap-4 text-3xl font-semibold">
-                    <div class="rounded-full bg-neutral-200 p-3 text-neutral-800">
-                        <svg
-                            aria-hidden="true"
-                            class="w-8"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                            color="currentColor"
-                            stroke-width="1.5"
-                        >
-                            <path
-                                d="M8 15C12.8747 15 15 12.949 15 8C15 12.949 17.1104 15 22 15C17.1104 15 15 17.1104 15 22C15 17.1104 12.8747 15 8 15Z"
-                                stroke="currentColor"
-                                stroke-linejoin="round"></path>
-                            <path
-                                d="M2 6.5C5.13376 6.5 6.5 5.18153 6.5 2C6.5 5.18153 7.85669 6.5 11 6.5C7.85669 6.5 6.5 7.85669 6.5 11C6.5 7.85669 5.13376 6.5 2 6.5Z"
-                                stroke="currentColor"
-                                stroke-linejoin="round"></path>
-                        </svg>
-                    </div>
-                    <span>Easy to enhance</span>
-                </h2>
-                <p class="text-xl/8">
-                    Features like statements and tags use a generic syntax, allowing you to define your own custom logic
-                    and structures to enhance configurations as your application requires
+        </div>
+        <div>
+            <p class="flex items-center gap-4 text-xl font-bold">
+                <span class="rounded-full bg-red-400 p-3 text-neutral-100">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        ><path
+                            d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"
+                        ></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg
+                    >
+                </span>
+                Simple
+            </p>
+            <div class="mt-4 space-y-2 text-lg">
+                <p>
+                    At its core, bconf is not inventing anything new. The syntax and features should be familiar to
+                    anyone who has programmed.
                 </p>
             </div>
         </div>
     </div>
+
+    <section class="mt-10">
+        <h2 class="border-b-2 border-b-red-400 pb-2 text-4xl font-bold">A Quick Overview</h2>
+        <div class="mt-4 space-y-4">
+            <div class="space-y-2">
+                <h3 class="text-2xl font-bold">Strings</h3>
+                <p>
+                    Strings can either be single-line or multi-line. A multi-line string uses three quotation marks as
+                    its delimiter and allows for raw tabs and newline characters
+                </p>
+                <Code
+                    code={`single_line = "The quick brown fox jumps over the lazy dog"
+multi_line = """
+    Roses are red,
+    Violets are blue
+"""`}
+                    theme="monokai"
+                    lang={bconfLang}
+                />
+                <p>
+                    Both single- and multi-line support escape sequences and embedded values. Almost any value can be
+                    used as an embedded value
+                </p>
+                <Code
+                    code={`$root = "/Users/brody"\npath = "\${$root}/projects/bconf/src"`}
+                    theme="monokai"
+                    lang={bconfLang}
+                />
+            </div>
+            <div class="space-y-2">
+                <h3 class="text-2xl font-bold">Variables</h3>
+                <p>
+                    Keys that start with a dollar sign (<code>$</code>) are a mutable variable. If they start with two
+                    dollar signs (<code>$$</code>) they are a constant and cannot be reassigned. Variables can be used
+                    as a value and their value will be deeply copied
+                </p>
+                <Code
+                    code={`$$PORT = 8080\n$domain = "https://example.com"\nconfig.domain = $domain\nconfig.port = $$PORT`}
+                    theme="monokai"
+                    lang={bconfLang}
+                />
+                <p>Variable keys will not appear in the resolved hash-map</p>
+                <Code
+                    code={`// $config will not appear in the output\n$config = { domain = "https://example.com"; port = 8080 }`}
+                    theme="monokai"
+                    lang={bconfLang}
+                />
+            </div>
+            <div class="space-y-2">
+                <h3 class="text-2xl font-bold">Resolvers</h3>
+                <p>
+                    Resolvers are basically just if-else statements, allowing for a single key to have a different value
+                    if certain criteria is met. Branches are evaluated first to last and are lazily evaluated when
+                    parsing. They are enclosed in parentheses (<code>()</code>), with branches separated by a pipe (<code
+                        >|</code
+                    >)
+                </p>
+                <Code
+                    code={`auth.token_expiry = (\n\t| eq(env("APP_ENV"), "prod") => "1hr"\n\t| "6hr"\n)`}
+                    theme="monokai"
+                    lang={bconfLang}
+                />
+            </div>
+            <div class="space-y-2">
+                <h3 class="text-2xl font-bold">Modifiers</h3>
+                <p>
+                    Modifiers are simply function calls. They can take any arbitrary number of arguments and must always
+                    return a value. They are evaluated when parsing. Arguments are enclosed with parentheses (<code
+                        >()</code
+                    >) and must have a leading identifier
+                </p>
+                <Code
+                    code={`// The final value will be \`trim = "modifier example"\`\ntitle = trim("    modifier example       ")`}
+                    theme="monokai"
+                    lang={bconfLang}
+                />
+            </div>
+            <div class="space-y-2">
+                <h3 class="text-2xl font-bold">Directives</h3>
+                <p>
+                    Identifiers that start with an at-symbol (<code>@</code>) are a directive. Directives take any
+                    number of arguments which are provided as the unevaluated input. Bare identifiers are allowed as
+                    arguments. A directive can return a value and/or modify the document
+                </p>
+                <Code
+                    code={`// Will insert the resolved value of the "./base.bconf" file\n@extends "./base.bconf"\nconfig.port = 8080`}
+                    theme="monokai"
+                    lang={bconfLang}
+                />
+            </div>
+        </div>
+    </section>
+
+    <section class="mt-12 flex flex-col items-center">
+        <h2 class="mb-2 text-4xl font-bold">More bconf</h2>
+        <p class="mb-4 max-w-96 text-center">
+            bconf supports more values, features, syntax, and many built-in modifiers and directives
+        </p>
+        <a
+            href="/en/specs/v0.4.0"
+            class="flex w-fit items-center justify-between gap-2 rounded-md bg-red-400 px-8 py-4 text-xl font-medium text-neutral-800 no-underline transition-colors hover:bg-red-300"
+        >
+            Read the full spec
+        </a>
+    </section>
 </HomeShell>
